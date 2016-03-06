@@ -12,8 +12,7 @@
 
 To remove the dotfile configs, run the following commands. Be certain to double check the contents of the files before removing so you don't lose custom settings.
 
-```
-unlink ~/.bash
+```unlink ~/.bash
 unlink ~/.bash_profile
 unlink ~/.bashrc
 unlink ~/.bin
@@ -23,7 +22,6 @@ unlink ~/.rspec
 unlink ~/.vim
 unlink ~/.vimrc
 rm ~/.gitconfig
-rm -rf ~/.dotfiles
-```
+rm -rf ~/.dotfiles```
 
 Then open a new terminal window to see the effects.
