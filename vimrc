@@ -3,7 +3,7 @@ filetype off                  " required
 
 syntax enable
 set background=dark
-colorscheme vibrantink
+colo desert
 
 set smartindent
 set tabstop=2
