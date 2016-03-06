@@ -18,9 +18,7 @@ git_bundles = [
   "git://github.com/ctrlpvim/ctrlp.vim"
 ]
 
-vim_org_scripts = [
-  ["vibrantink", "10117", "colors"]
-]
+vim_org_scripts = []
 
 get_requests = []
 
