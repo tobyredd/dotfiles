@@ -3,7 +3,12 @@ filetype off                  " required
 
 syntax enable
 set background=dark
-colo desert
+colorscheme kafka
+
+filetype off " for pathogen to load
+" Calling pathogen to load the bundles
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 
 set smartindent
 set tabstop=2
