@@ -1,0 +1,25 @@
+# Setup the path
+PATH=$HOME/.bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+# Export some environment variables
+export ARCHFLAGS="-arch x86_64"
+export EDITOR=vim
+export FIREBOLT_SKIP_WARMING="1"
+export GIT_PS1_SHOWDIRTYSTATE="1"
+export PROJECT_PATH=$HOME/Code
+export SSL_CERT_FILE="/usr/local/etc/openssl/cert.pem"
+
+# Load the rest of the configuration
+source ~/.bash/colors
+source ~/.bash/completions
+source ~/.bash/functions
+source ~/.bash/aliases
+
+# Map keys for better navigation
+bind '"\e\e[D": backward-word'
+bind '"\e\e[C": forward-word'
+bind '"\e[1;2H": beginning-of-line'
+bind '"\e[1;2F": end-of-line'
+
+# Setup the prompt
+PS1="$BRIGHT_CYAN\w$BRIGHT_VIOLET \$(parse_git_branch)$BRIGHT_WHITE\n∴ "

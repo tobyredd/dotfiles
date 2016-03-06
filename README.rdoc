@@ -1,0 +1,29 @@
+= Toby Redd's Dotfiles
+
+
+== Installation
+
+  git clone git://github.com/tobyredd/dotfiles ~/.dotfiles
+  cd ~/.dotfiles
+  rake install
+
+
+== Uninstall
+
+To remove the dotfile configs, run the following commands. Be certain to double check the contents of the files before removing so you don't lose custom settings.
+
+```
+unlink ~/.bash
+unlink ~/.bash_profile
+unlink ~/.bashrc
+unlink ~/.bin
+unlink ~/.gemrc
+unlink ~/.gitignore_global
+unlink ~/.rspec
+unlink ~/.vim
+unlink ~/.vimrc
+rm ~/.gitconfig
+rm -rf ~/.dotfiles
+```
+
+Then open a new terminal window to see the effects.

@@ -1,0 +1,54 @@
+# general aliases
+alias cd..="cd .."
+alias l="ls -lah"
+alias lp="ls -p"
+alias o="open ."
+
+# the "kp" alias ("que pasa"), in honor of tony p.
+alias kp="ps auxwww"
+
+# bundler aliases
+alias b="bundle"
+alias bc="b console"
+alias bi="b install"
+alias biv="bi --path vendor && echo 'vendor/ruby' >> .gitignore"
+alias bivp="biv && bp"
+alias bl="b list"
+alias bout="b outdated"
+alias bp="b package"
+alias bu="b update"
+alias bx="b exec"
+
+# git aliases
+alias g="git"
+alias ga="g add"
+alias gaa="g add -A"
+alias gb="g branch"
+alias gba="g branch -a"
+alias gc="g checkout"
+alias gf="g fetch"
+alias gh="g rev-parse HEAD"
+alias gi="g commit"
+alias gl="g log"
+alias glo="gl --oneline"
+alias gst="g status"
+alias pop="g stash pop"
+alias stash="g stash"
+alias gd="g diff"
+
+# misc
+alias dotfiles='cd ~/.dotfiles'
+alias derp='PB_IGNORE_DEPRECATIONS=1'
+alias http='python -m SimpleHTTPServer'
+alias lrb='localrb'
+alias ns='nslookup'
+alias path='echo $PATH'
+alias reload='. ~/.bash_profile'
+alias t='turbo'
+alias tb='t b'
+alias tbu='t bu'
+alias tbx='t bx'
+
+if [ `uname` == 'Darwin' ]; then
+  alias ls="ls -G"
+fi

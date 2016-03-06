@@ -1,0 +1,249 @@
+#!bash
+#
+# Changing directory to code project
+function c { cd $PROJECT_PATH/$1; }
+
+# Changing directory to code project
+function d { cd $PROJECT_PATH/deploys/$1; }
+
+# Interactively rebase the current git branch
+function rebase {
+  __git_status_check
+  git rebase -i HEAD~$1
+}
+
+function cherry {
+  __git_repo_check
+
+  local upstream=${1:-'master'}
+  local head=${2:-'HEAD'}
+
+  git cherry -v $upstream $head
+}
+
+# Search through the whole codebase
+function hunt { find $PROJECT_PATH -type f -name "$1" -not -path "*vendor*" -print0 | xargs -0 ack -Q $2; }
+
+# Prompt setup
+function parse_git_branch { echo `__git_ps1`; }
+
+# Backport changes downstream
+function backport {
+  __git_sync_remote_branches
+
+  local startbranch=$(__git_current_branch)
+
+  echo 'Backporting stable > qa';
+  git checkout qa
+  git merge stable
+  git push origin qa
+
+  echo 'Backporting qa > master';
+  git checkout master
+  git merge qa
+  git push origin master
+
+  __git_checkout_unless_current $startbranch
+
+  echo "All branches have been backported."
+}
+
+# List all commits matching a specific tag (e.g. prod-2015)
+# Also accepts an optional directory
+function commits {
+  __git_repo_check
+
+  local current_directory=$PWD
+  local total_commits=0
+  local directory=${2:-'.'}
+
+  for repo in $(ls $directory)
+  do
+    cd $current_directory/$repo
+    local commits=$(git rev-list HEAD --count)
+    total_commits=$((commits + total_commits))
+    echo "$repo: $commits"
+  done
+
+  echo "total: $total_commits"
+
+  cd $current_directory
+}
+
+# List all releases matching a specific tag (e.g. prod-2015)
+# Also accepts an optional directory
+function releases {
+  __git_repo_check
+
+  local current_directory=$PWD
+  local total_releases=0
+  local directory=${2:-'.'}
+
+  for repo in $(ls $directory)
+  do
+    cd $current_directory/$repo
+    local releases=$(git tag | grep $1 | wc -l | tr -d ' ')
+    total_releases=$((releases + total_releases))
+    echo "$repo: $releases"
+  done
+
+  echo "total: $total_releases"
+
+  cd $current_directory
+}
+
+# Hard-reset branches back to origin
+function hardreset {
+  __git_status_check
+
+  git fetch origin
+
+  local startbranch=$(__git_current_branch)
+
+  for branch in $(__git_branches)
+  do
+    git rev-parse origin/$branch &> /dev/null
+    if [[ $? -eq 0 ]]
+    then
+      currev=$(git rev-parse $branch)
+      syncrev=$(git rev-parse origin/$branch)
+      if [[ $currev != $syncrev ]]
+      then
+        echo " > Resetting branch $branch to origin/$branch"
+        git checkout $branch
+        git reset origin/$branch --hard
+      fi
+    else
+      echo " ! Branch $branch doesn't have an origin"
+    fi
+  done
+
+  __git_checkout_unless_current $startbranch
+
+  echo "Local branches have been reset."
+}
+
+function gsync {
+  case $1 in
+    '-A' | '--all')
+      local current_directory=$PWD
+
+      for repo in $(ls -d */)
+      do
+        cd $current_directory/$repo
+        __git_sync_remote_branches
+      done
+
+      cd $current_directory;;
+    *)
+      __git_sync_remote_branches;;
+  esac
+}
+
+function __git_branches {
+  git branch | sed -e 's|* ||g' -e 's|^[ ]*||'
+}
+
+function __git_checkout_unless_current {
+  [ $1 ] && [ $1 != $(__git_current_branch) ] && git checkout $1
+}
+
+function __git_current_branch {
+  __git_repo_check
+
+  git branch | grep '*' | sed -e 's/* //'
+}
+
+function __git_repo_check {
+  [ -d '.git' ] || (echo "Not a git repo." && return)
+}
+
+function __git_status_check {
+  __git_repo_check
+
+  git status -s
+  git diff-index --quiet HEAD --
+
+  [ $? -ne 0 ] && echo "You have local changes that haven't been committed!" && return
+}
+
+# Pull all changes from origin
+function __git_sync_remote_branches {
+  __git_status_check
+
+  git remote prune origin
+  git fetch origin
+
+  local startbranch=$(__git_current_branch)
+
+  for branch in $(__git_branches)
+  do
+    git rev-parse origin/$branch &> /dev/null
+
+    if [[ $? -eq 0 ]]
+    then
+      local currev=$(git rev-parse $branch)
+      local syncrev=$(git rev-parse origin/$branch)
+
+      if [[ $currev != $syncrev ]]
+      then
+        echo " > Synchronizing branch $branch"
+        git checkout $branch
+        git merge origin/$branch
+      fi
+    else
+      echo " ! Branch $branch doesn't have an origin"
+    fi
+  done
+
+  __git_checkout_unless_current $startbranch
+
+  echo "Local branches are in sync."
+}
+
+# Downstream out-of-date branch check
+function downstream {
+  echo 'Downstream out-of-date branch check'
+
+  echo '[stable > qa]'
+  cherry qa stable
+
+  echo '[qa > master]'
+  cherry master qa
+}
+
+# Upstream branch check
+function upstream {
+  echo 'Upstream branch check'
+
+  echo '[qa > stable]'
+  cherry stable qa
+
+  echo '[master > qa]'
+  cherry qa master
+}
+
+# Switch to latest JRuby with a gemset of the current directory
+function jrb {
+  rvm use jruby@${PWD##*/} --create
+}
+
+# Link a given Ruby into the RVM bin so it can be executed directly
+function linkrb {
+  ln -s $rvm_path/rubies/$1/bin/ruby $rvm_bin_path/$1
+}
+
+# Switch to Ruby version specified in the current directory
+function localrb {
+  rvm use .
+}
+
+# Switch to latest Ruby with a gemset of the current directory
+function rb {
+  rvm use ruby@${PWD##*/} --create
+}
+
+# Switch to latest Ruby 2.0 patch with a gemset of the current directory
+function rb2 {
+  rvm use ruby-2.0.0@${PWD##*/} --create
+}
