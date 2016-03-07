@@ -1,14 +1,9 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
+filetype plugin indent on
 
 syntax enable
 set background=dark
 colorscheme kafka
-
-filetype off " for pathogen to load
-" Calling pathogen to load the bundles
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
 
 set smartindent
 set tabstop=2
@@ -20,3 +15,7 @@ set backspace=indent,eol,start
 " " trying out relative number for a bit
 " " set number
 set number
+
+" Calling pathogen to load the bundles
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
