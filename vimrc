@@ -19,3 +19,10 @@ set number
 " Calling pathogen to load the bundles
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+
+if $VIM_CRONTAB == "true"
+  set nobackup
+  set nowritebackup
+endif
+
+autocmd filetype crontab setlocal nobackup nowritebackup

@@ -23,3 +23,6 @@ bind '"\e[1;2F": end-of-line'
 
 # Setup the prompt
 PS1="$BRIGHT_CYAN\w$BRIGHT_VIOLET \$(parse_git_branch)$BRIGHT_WHITE\n∴ "
+
+# Fix crontab
+alias crontab="VIM_CRONTAB=true crontab"
