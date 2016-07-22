@@ -14,6 +14,7 @@ git_bundles = [
   "git://github.com/terryma/vim-multiple-cursors",
   "git://github.com/tpope/vim-rails",
   "git://github.com/vim-ruby/vim-ruby",
+  "git://github.com/elixir-lang/vim-elixir",
   "git://github.com/tpope/vim-fugitive.git",
   "git://github.com/ctrlpvim/ctrlp.vim",
   "git://github.com/scrooloose/nerdtree.git"

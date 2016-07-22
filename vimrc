@@ -17,8 +17,7 @@ set backspace=indent,eol,start
 set number
 
 " Calling pathogen to load the bundles
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+execute pathogen#infect()
 
 if $VIM_CRONTAB == "true"
   set nobackup
@@ -26,3 +25,5 @@ if $VIM_CRONTAB == "true"
 endif
 
 autocmd filetype crontab setlocal nobackup nowritebackup
+
+set term=screen-256color
