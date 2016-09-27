@@ -27,3 +27,6 @@ endif
 autocmd filetype crontab setlocal nobackup nowritebackup
 
 set term=screen-256color
+
+"" Set ctrl-c to copy register to system clipboard
+vnoremap <C-c> "*y
