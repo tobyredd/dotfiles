@@ -3,7 +3,7 @@ filetype plugin indent on
 
 syntax enable
 set background=dark
-colorscheme kafka
+colorscheme broduo
 
 set smartindent
 set tabstop=2
@@ -29,4 +29,5 @@ autocmd filetype crontab setlocal nobackup nowritebackup
 set term=screen-256color
 
 "" Set ctrl-c to copy register to system clipboard
+set clipboard=unnamed
 vnoremap <C-c> "*y
